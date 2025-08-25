@@ -18,7 +18,7 @@ class SimplePrinter(TrainerCallback):
         maxs = state.max_steps if state.max_steps is not None else "?"
         print(f"[log] step {step}/{maxs} | logs: { {k: round(v,4) if isinstance(v,(int,float)) else v for k,v in logs.items()} }")
 
-def train_mini_llava(model, tokenizer, train_dataloader, eval_dataloader=None, use_lora=False,
+def train_mini_llava_2(model, tokenizer, train_dataloader, eval_dataloader=None, use_lora=False,
                      max_steps=200,  # ← スモークテスト用。ちゃんと回す時は増やす/外す
                      num_train_epochs=1,  # max_steps を優先。外すなら epoch 指定でもOK
                      learning_rate=5e-5):
