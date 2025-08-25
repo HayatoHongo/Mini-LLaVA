@@ -32,7 +32,6 @@ def train_mini_llava_2(model, tokenizer, train_dataloader, eval_dataloader=None,
         logging_first_step=True,    # ← 最初の1ステップ目から出す
         save_strategy="steps",
         save_steps=200,             # ← スモーク中は大きめでOK
-        evaluation_strategy="no" if eval_dataloader is None else "steps",
         eval_steps=200,
         report_to="none",           # wandb等を使わない
         disable_tqdm=False,         # 進捗バーを出す
