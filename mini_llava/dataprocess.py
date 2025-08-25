@@ -467,7 +467,7 @@ class DataCollatorForSupervisedDataset(object):
         return to_cuda(batch)
     
     
-from config import DataArguments 
+from .config import DataArguments 
 from tqdm import tqdm as tqdm
 import datasets
 from datasets import load_dataset
