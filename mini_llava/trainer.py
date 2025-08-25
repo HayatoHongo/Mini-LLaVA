@@ -28,7 +28,7 @@ def train_mini_llava_2(model, tokenizer, train_dataloader, eval_dataloader=None,
         output_dir="/content/Mini-LLaVA/results",
         # 進捗/保存/評価の頻度
         logging_strategy="steps",
-        logging_steps=10,           # ← 10ステップごとにログ
+        logging_steps=1,           # ← 1ステップごとにログ
         logging_first_step=True,    # ← 最初の1ステップ目から出す
         save_strategy="steps",
         save_steps=200,             # ← スモーク中は大きめでOK
