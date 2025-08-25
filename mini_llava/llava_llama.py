@@ -11,9 +11,9 @@ from transformers import LlamaModel, LlamaForCausalLM, LlamaTokenizer
 from transformers.modeling_outputs import CausalLMOutputWithPast
 from transformers.generation.utils import GenerateOutput
 
-from multimodal_encoder.builder import build_vision_tower
-from multimodal_resampler.builder import build_vision_resampler
-from multimodal_projector.builder import build_vision_projector
+from .multimodal_encoder.builder import build_vision_tower
+from .multimodal_resampler.builder import build_vision_resampler
+from .multimodal_projector.builder import build_vision_projector
 
 from llava_arch import LlavaMetaForCausalLM
 
