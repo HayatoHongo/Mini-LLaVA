@@ -187,7 +187,7 @@ def modality_map(mode: int, idx: int, num_frames: int = 1):
 
 
 
-class LazyProcessor: # For inference with VLM
+class LazyProcessor: # For inference with VLMƒ
     
     def __init__(self, data_args, tokenizer, image_processor):
         self.tokenizer = tokenizer
@@ -527,6 +527,60 @@ def prepare_docci_data(output_json_path, image_folder="data/docci"):
     )
     
     return data_args
+
+
+def prepare_coco_data(
+    output_json_path="data/coco_converted.json",
+    image_folder="data/coco",
+    split="train[:1%]",
+    dataset_id="whyen-wang/coco_captions",
+):
+    os.makedirs(image_folder, exist_ok=True)
+    os.makedirs(os.path.dirname(output_json_path), exist_ok=True)
+
+    ds = load_dataset(dataset_id, split=split)  # 画像はPILで来る
+    data_json = []
+
+    for idx, ex in enumerate(tqdm(ds, desc="COCO→DocCI形式へ変換")):
+        img = ex.get("image", None)           # PIL.Image
+        caps = ex.get("captions", None)       # list[str] or None
+        if img is None or not caps:
+            continue
+        cap = caps[0]                         # 代表1本だけ使用
+
+        # 画像を保存（既存のDataset実装が相対パスを前提にjoinするため）
+        fname = f"coco_{idx:06d}.jpg"
+        fpath = os.path.join(image_folder, fname)
+        try:
+            img.save(fpath, format="JPEG")
+        except Exception:
+            continue  # 壊れ画像などはスキップ
+
+        # Mini-LLaVA側の prepare_docci_data と同じ“会話＋media”構造に合わせる
+        data_item = {
+            "id": f"coco_{idx:06d}",
+            "media": [{"image": fname}],
+            "conversations": [
+                {"from": "human", "value": "<image>\nDescribe the image."},
+                {"from": "gpt",   "value": cap}
+            ],
+        }
+        data_json.append(data_item)
+
+    with open(output_json_path, "w", encoding="utf-8") as f:
+        json.dump(data_json, f, indent=2, ensure_ascii=False)
+
+    # 既存コードと同じ DataArguments を返す（video系はダミー値でOK）
+    return DataArguments(
+        data_path=output_json_path,
+        image_folder=image_folder + "/",
+        video_folder=image_folder + "/",
+        video_fps=1,
+        frames_upbound=0,
+        add_time_instruction=False,
+        force_sample=False,
+        default_fps=10,
+    )
 
 
 def generate_text(prompt, model, tokenizer, device, generation_config):
