@@ -26,7 +26,7 @@ class LlavaConfig(LlamaConfig):
     top_p: Optional[float] = None
     vision_tower: Optional[str] = None
 
-    model_name_or_path: str = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+    model_name_or_path: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
     mm_vision_tower: str = "openai/clip-vit-base-patch32"
     mm_vision_select_feature: str = "patch"
     mm_vision_select_layer: int = -1
@@ -46,7 +46,7 @@ class LlavaConfig(LlamaConfig):
                 setattr(self, key, value)
 
 
-def prep_llava_llama_tokenizer(model_name_or_path: str = "meta-llama/Meta-Llama-3.1-8B-Instruct") -> AutoTokenizer:
+def prep_llava_llama_tokenizer(model_name_or_path: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0") -> AutoTokenizer:
     tokenizer = AutoTokenizer.from_pretrained(model_name_or_path)
     tokenizer.add_special_tokens({
         'pad_token': '[PAD]',

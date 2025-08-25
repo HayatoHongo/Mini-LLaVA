@@ -3,7 +3,7 @@ from typing import Optional
 
 @dataclass
 class ModelArguments:
-    model_name_or_path: str = field(default="meta-llama/Meta-Llama-3.1-8B-Instruct")
+    model_name_or_path: str = field(default="TinyLlama/TinyLlama-1.1B-Chat-v1.0")
     
     mm_vision_tower: str = field(default="openai/clip-vit-base-patch32")    
     mm_vision_select_feature: str = field(default="patch")
