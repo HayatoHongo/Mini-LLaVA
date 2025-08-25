@@ -1,6 +1,6 @@
 from .builder import build_vision_tower
 from .clip_encoder import CLIPVisionTower
-from .utils import (
+from .constants import (
     DEFAULT_IMAGE_TOKEN,
     DEFAULT_IMAGE_PATCH_TOKEN,
     DEFAULT_IM_START_TOKEN,
