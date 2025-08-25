@@ -16,7 +16,9 @@ class SimplePrinter(TrainerCallback):
         # 例: {'loss': 3.21, 'grad_norm': 0.9, 'learning_rate': 5e-5, 'epoch': 0.12, 'step': 10}
         step = int(state.global_step)
         maxs = state.max_steps if state.max_steps is not None else "?"
-        print(f"[log] step {step}/{maxs} | logs: { {k: round(v,4) if isinstance(v,(int,float)) else v for k,v in logs.items()} }")
+        print(f"[log] step {step}/{maxs} | logs: "
+              f"{ {k: round(v,4) if isinstance(v,(int,float)) else v for k,v in logs.items()} }",
+              flush=True)   # 👈 追加
 
 def train_mini_llava_2(model, tokenizer, train_dataloader, eval_dataloader=None, use_lora=False,
                      max_steps=200,  # ← スモークテスト用。ちゃんと回す時は増やす/外す
