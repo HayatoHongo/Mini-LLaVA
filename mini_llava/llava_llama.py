@@ -15,7 +15,7 @@ from .multimodal_encoder.builder import build_vision_tower
 from .multimodal_resampler.builder import build_vision_resampler
 from .multimodal_projector.builder import build_vision_projector
 
-from llava_arch import LlavaMetaForCausalLM
+from .llava_arch import LlavaMetaForCausalLM
 
 
 class LlavaConfig(LlamaConfig):
