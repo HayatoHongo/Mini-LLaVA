@@ -17,6 +17,15 @@ class SimplePrinter(TrainerCallback):
             print(f"[log] step {step}/{mx} | {short}", flush=True)
 
 def train_safe(model, tokenizer, train_dataloader, max_steps=10):
+    # ★ KVキャッシュをオフ
+    if hasattr(model, "config"):
+        model.config.use_cache = False
+    try:
+        # ★ gradient checkpointing 有効化
+        model.gradient_checkpointing_enable()
+    except Exception as e:
+        print("[warn] gradient_checkpointing_enable failed:", e)    
+
     args = TrainingArguments(
         output_dir="/content/Mini-LLaVA/results",
         logging_strategy="steps",
@@ -30,7 +39,8 @@ def train_safe(model, tokenizer, train_dataloader, max_steps=10):
         warmup_steps=0,
         weight_decay=0.0,
         gradient_accumulation_steps=1,
-        fp16=False,                      # ← まずは安全にOFF（通ったらONにしてOK）
+        fp16=False,                      # ← まずは安全にOFF（通ったらONにしてOK
+        gradient_checkpointing=True,     # ★ Trainer側でも有効化
         dataloader_num_workers=0,        
         dataloader_pin_memory=False,
         remove_unused_columns=False,
