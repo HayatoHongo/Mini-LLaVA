@@ -18,9 +18,11 @@ from .multimodal_projector.builder import build_vision_projector
 from .llava_arch import LlavaMetaForCausalLM
 
 
+# 先頭の import はそのまま
+
 class LlavaConfig(LlamaConfig):
     model_type = "llava_llama"
-    temperature: float = None  # reset to None to correspond to do_sample=False
+    temperature: float = None
     max_new_tokens: int = 1024
     do_sample: bool = False
     top_p: Optional[float] = None
@@ -30,29 +32,38 @@ class LlavaConfig(LlamaConfig):
     mm_vision_tower: str = "openai/clip-vit-base-patch32"
     mm_vision_select_feature: str = "patch"
     mm_vision_select_layer: int = -1
-    mm_hidden_size: int = 768  # this one match the pre-trained vision encoder
+    mm_hidden_size: int = 768
     use_im_start_end: bool = False
     use_im_patch_token: bool = True
     delay_load: bool = True
     mm_resampler_type: Optional[str] = None
 
     def __init__(self, **kwargs):
-        # TinyLlama の既定値を dict に
-        base = LlamaConfig.from_pretrained(self.model_name_or_path).to_dict()
+        """
+        最小変更ポリシー:
+        - checkpoint から読み込むときは kwargs に中身が入ってくる → そのまま親に渡す（追加マージ禁止）
+        - 新規生成（AutoConfig.for_model("llava_llama") 等）で kwargs が空なら、
+          TinyLlama の既定設定をベースに一度だけ初期化する
+        """
+        if kwargs:  # ← checkpoint 経由のロード時はこちら
+            # 衝突しやすいキーは一応消して安全に（無くても動くが保険）
+            for k in ("architectures", "model_type"):
+                kwargs.pop(k, None)
+            super().__init__(**kwargs)
+        else:       # ← 新規生成時のみ TinyLlama 既定値を読む
+            base = LlamaConfig.from_pretrained(self.model_name_or_path).to_dict()
+            for k in ("architectures", "model_type"):
+                base.pop(k, None)
+            super().__init__(**base)
 
-        # ★ 衝突しやすいキーを両方から落としておく（最小変更ポイント）
-        for k in ("architectures", "model_type"):
-            base.pop(k, None)
-            kwargs.pop(k, None)
+        # LLaVA 固有の既定値を、未設定なら埋める（元の処理の“上書き”と等価だが安全側）
+        self.model_type = "llava_llama"
+        self.mm_vision_tower = getattr(self, "mm_vision_tower", "openai/clip-vit-base-patch32")
+        self.mm_hidden_size = getattr(self, "mm_hidden_size", 768)
+        self.use_im_start_end = getattr(self, "use_im_start_end", False)
+        self.use_im_patch_token = getattr(self, "use_im_patch_token", True)
+        self.delay_load = getattr(self, "delay_load", True)
 
-        # 1回にまとめて渡す
-        base.update(kwargs)
-        super().__init__(**base)
-
-        # 既存の「LLaVA固有フィールド」を上書きする処理はそのまま
-        for key, value in self.__class__.__dict__.items():
-            if not key.startswith("__") and not callable(value):
-                setattr(self, key, value)
 
 
 def prep_llava_llama_tokenizer(model_name_or_path: str = "TinyLlama/TinyLlama-1.1B-Chat-v1.0") -> AutoTokenizer:
