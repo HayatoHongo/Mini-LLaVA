@@ -35,9 +35,11 @@ def train_safe(model, tokenizer, train_dataloader, max_steps=10):
         dataloader_pin_memory=False,
         remove_unused_columns=False,
     )
-    print(f"[info] steps/epoch={len(train_dataloader)}, run steps={max_steps}")
+    print(f"[info] steps/epoch={len(train_dataloader)}, run steps={max_steps}", flush=True)
     tr = MMTrainer(model=model, args=args, tokenizer=tokenizer, custom_train_dataloader=train_dataloader)
+    print("[info] MMTrainer initialized", flush=True)
     tr.add_callback(SimplePrinter())
+    print("[info] training start", flush=True)
     tr.train()
     print("done.")
     return tr
