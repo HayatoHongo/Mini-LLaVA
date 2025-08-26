@@ -31,7 +31,7 @@ def train_safe(model, tokenizer, train_dataloader, max_steps=10):
         weight_decay=0.0,
         gradient_accumulation_steps=1,
         fp16=False,                      # ← まずは安全にOFF（通ったらONにしてOK）
-        dataloader_num_workers=2,        
+        dataloader_num_workers=0,        
         dataloader_pin_memory=False,
         remove_unused_columns=False,
     )
