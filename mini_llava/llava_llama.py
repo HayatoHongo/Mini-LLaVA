@@ -20,7 +20,7 @@ from .llava_arch import LlavaMetaForCausalLM
 
 class LlavaConfig(LlamaConfig):
     model_type = "llava_llama"
-    temperature: float = 0.0  # reset to 0.0, previously 0.9 for Vicuna
+    temperature: float = None  # reset to None to correspond to do_sample=False
     max_new_tokens: int = 1024
     do_sample: bool = False
     top_p: Optional[float] = None
