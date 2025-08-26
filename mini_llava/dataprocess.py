@@ -464,7 +464,7 @@ class DataCollatorForSupervisedDataset(object):
                      images=images,
                      modalities=modalities)
         
-        return to_cuda(batch)
+        return batch #to_cuda(batch)
     
     
 from .config import DataArguments 
