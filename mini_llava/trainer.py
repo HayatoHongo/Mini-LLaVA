@@ -41,5 +41,3 @@ def train_safe(model, tokenizer, train_dataloader, max_steps=10):
     tr.train()
     print("done.")
     return tr
-
-_ = train_safe(llava_model, tokenizer, dataloader, max_steps=3)
