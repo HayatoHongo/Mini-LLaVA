@@ -16,7 +16,7 @@ class SimplePrinter(TrainerCallback):
             short = {k:(round(v,4) if isinstance(v,(int,float)) else v) for k,v in logs.items()}
             print(f"[log] step {step}/{mx} | {short}", flush=True)
 
-def train_safe(model, tokenizer, train_dataloader, num_train_epochs=1, max_steps=10):
+def train_safe(model, tokenizer, train_dataloader, logging_steps=1, num_train_epochs=1, max_steps=10):
     # ★ KVキャッシュをオフ
     if hasattr(model, "config"):
         model.config.use_cache = False
@@ -29,7 +29,7 @@ def train_safe(model, tokenizer, train_dataloader, num_train_epochs=1, max_steps
     args = TrainingArguments(
         output_dir="/content/Mini-LLaVA/results",
         logging_strategy="steps",
-        logging_steps=1,                 # ← 毎ステップ出す
+        logging_steps=logging_steps,                 # ← 毎ステップ出す
         logging_first_step=True,
         report_to="none",
         disable_tqdm=True,               # ← TQDMを完全停止（stdout干渉防止）
