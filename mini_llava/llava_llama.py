@@ -37,8 +37,12 @@ class LlavaConfig(LlamaConfig):
     mm_resampler_type: Optional[str] = None
 
     def __init__(self, **kwargs):
-        llama_3_1_config = LlamaConfig.from_pretrained(self.model_name_or_path)
-        super().__init__(**vars(llama_3_1_config), **kwargs)
+        llama_cfg = LlamaConfig.from_pretrained(self.model_name_or_path).to_dict()
+        llama_cfg.update(kwargs)                  # ← ここで“1回にまとめる”だけ
+        super().__init__(**llama_cfg)             # ← 以降の挙動は元のまま
+
+        #llama_3_1_config = LlamaConfig.from_pretrained(self.model_name_or_path)
+        #super().__init__(**vars(llama_3_1_config), **kwargs)
         
         # Set LLaVA-specific attributes
         for key, value in self.__class__.__dict__.items():
