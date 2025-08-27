@@ -7,6 +7,10 @@ from torch.utils.data import Dataset
 import numpy as np
 from dataclasses import dataclass
 from torch.nn.utils.rnn import pad_sequence
+from .config import DataArguments 
+from tqdm import tqdm as tqdm
+import datasets
+from datasets import load_dataset
 
 
 # Question: It's important to note the flow of special token <image>, IMAGE_TOKEN_INDEX, as well as the DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
@@ -465,12 +469,6 @@ class DataCollatorForSupervisedDataset(object):
                      modalities=modalities)
         
         return to_cuda(batch)
-    
-    
-from config import DataArguments 
-from tqdm import tqdm as tqdm
-import datasets
-from datasets import load_dataset
     
     
 def prepare_docci_data(output_json_path, image_folder="data/docci"):
