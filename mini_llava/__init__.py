@@ -1,7 +1,7 @@
-from llava_llama import LlavaLlamaForCausalLM
-from dataprocess import generate_text, LazyProcessor, LazySupervisedDataset, prepare_docci_data, DataCollatorForSupervisedDataset
-from config import DataArguments
-from trainer import train_mini_llava
+from .llava_llama import LlavaLlamaForCausalLM
+from .dataprocess import generate_text, LazyProcessor, LazySupervisedDataset, prepare_docci_data, DataCollatorForSupervisedDataset
+from .config import DataArguments
+from .trainer import train_mini_llava
 
 # Default data_args used for testing
 data_args = DataArguments(

@@ -1,7 +1,7 @@
 import transformers 
 from typing import Dict, Sequence, List
 import copy, torch, json, os, av
-from constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN
+from .constants import IGNORE_INDEX, IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN
 from PIL import Image
 from torch.utils.data import Dataset 
 import numpy as np
