@@ -218,7 +218,7 @@ class LazyProcessor: # For inference with VLM
 
     def process_data(self, device: str = "cuda"):
         dataset = LazySupervisedDataset(self.data_args, self.tokenizer, self.image_processor, self.data)
-        
+
         data_with_media = []
         data_without_media = []
         for _, data in self.data.items():
@@ -470,7 +470,7 @@ class DataCollatorForSupervisedDataset(object):
         
         return to_cuda(batch)
     
-    
+"""   
 def prepare_docci_data(output_json_path, image_folder="data/docci"):
     
     docci_dataset = load_dataset("google/docci", trust_remote_code=True) # load docci dataset
@@ -525,7 +525,7 @@ def prepare_docci_data(output_json_path, image_folder="data/docci"):
     )
     
     return data_args
-
+"""
 
 def generate_text(prompt, model, tokenizer, device, generation_config):
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
