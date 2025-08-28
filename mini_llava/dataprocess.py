@@ -215,7 +215,7 @@ class LazyProcessor: # For inference with VLM
                 self.data[id]["media"].append({"video": media_path})
             else:
                 raise ValueError(f"Unsupported media type: {media_path}")
-        
+
     def process_data(self, device: str = "cuda"):
         dataset = LazySupervisedDataset(self.data_args, self.tokenizer, self.image_processor, self.data)
         
