@@ -13,14 +13,14 @@ class MMTrainer(Trainer):
         return self.custom_train_dataloader
 
 
-def train_mini_llava(model, tokenizer, train_dataloader, eval_dataloader=None, use_lora=False):
+def train_mini_llava(model, tokenizer, train_dataloader, eval_dataloader=None, use_lora=False, num_train_epochs=1, per_device_train_batch_size=1, per_device_eval_batch_size=1, warmup_steps=100):
     # Define training arguments
     training_args = TrainingArguments(
         output_dir="./results",
-        num_train_epochs=1, # 3,
-        per_device_train_batch_size=1, # 8,
-        per_device_eval_batch_size=1, # 8,
-        warmup_steps=100, #500,
+        num_train_epochs=num_train_epochs,
+        per_device_train_batch_size=per_device_train_batch_size, # 8,
+        per_device_eval_batch_size=per_device_eval_batch_size, # 8,
+        warmup_steps=warmup_steps, #500,
         weight_decay=0.01,
         logging_dir="./logs",
     )
