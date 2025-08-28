@@ -1,5 +1,6 @@
 from .llava_llama import LlavaLlamaForCausalLM
-from .dataprocess import generate_text, LazyProcessor, LazySupervisedDataset, prepare_docci_data, DataCollatorForSupervisedDataset
+from .dataprocess import generate_text, LazyProcessor, LazySupervisedDataset,  DataCollatorForSupervisedDataset
+from .docci import prepare_docci_data
 from .config import DataArguments
 from .trainer import train_mini_llava
 
