@@ -307,7 +307,7 @@ class LazyProcessor: # For inference with VLM
 
 class LazySupervisedDataset(Dataset):
     
-    def __init__(self, data_config, tokenizer, image_processor, data=None):
+    def __init__(self, data_args, tokenizer, image_processor, data=None):
         self.tokenizer = tokenizer
         self.image_processor = image_processor
         self.data_args = data_args
@@ -344,7 +344,7 @@ class LazySupervisedDataset(Dataset):
             frame_files = [os.path.join(video_path, f) for f in os.listdir(video_path) if os.path.isfile(os.path.join(video_path, f))]
             frame_files.sort()
             
-            # self.data_args.frames_upbound: default 0, force_sample: default False
+            # self.data_args.frames_upbound: default 0
             num_frames_to_sample = self.data_args.frames_upbound if self.data_args.force_sample else 10
             total_frames = len(frame_files)
             sampled_indices = np.linspace(0, total_frames - 1, num_frames_to_sample, dtype=int)
@@ -359,7 +359,6 @@ class LazySupervisedDataset(Dataset):
                 except IOError:
                     print(f"Failed to read frame at path: {frame_path}")
             
-            # data_args.default_fps: default 10
             avg_fps = self.data_args.default_fps  # Use a default FPS or get from data_args
             video_time = total_frames / avg_fps
             frame_time = [i/avg_fps for i in sampled_indices]
