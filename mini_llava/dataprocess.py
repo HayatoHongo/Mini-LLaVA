@@ -469,63 +469,7 @@ class DataCollatorForSupervisedDataset(object):
                      modalities=modalities)
         
         return to_cuda(batch)
-    
-"""   
-def prepare_docci_data(output_json_path, image_folder="data/docci"):
-    
-    docci_dataset = load_dataset("google/docci", trust_remote_code=True) # load docci dataset
-
-    data_json = []
-    os.makedirs(image_folder, exist_ok=True)
-    
-    for idx, item in tqdm(enumerate(docci_dataset['train']), desc="Processing", total=len(docci_dataset['train'])):
-        description = item['description']
-        image = item['image']
-        
-        # Store the image and record the image path
-        img_filename = f"docci_{idx}.jpg"
-        img_path = os.path.join(image_folder, img_filename)
-        
-        # Save the image
-        image.save(img_path)
-        
-        # Create the compatible json structure
-        data_item = {
-            "id": f"docci_{idx}",
-            "media": [
-                {"image": img_filename}
-            ],
-            "conversations": [
-                {
-                    "from": "human",
-                    "value": "<image>\nCan you describe this image?"
-                },
-                {
-                    "from": "gpt",
-                    "value": description
-                }
-            ]
-        }
-        
-        data_json.append(data_item)
-    
-    # Save the converted data to a JSON file
-    with open(output_json_path, 'w') as f:
-        json.dump(data_json, f, indent=2)
-        
-    data_args = DataArguments(
-        data_path = output_json_path,
-        image_folder = image_folder + "/",
-        video_folder = image_folder + "/",
-        video_fps = 1,
-        frames_upbound = 0,
-        add_time_instruction = False,
-        force_sample = False,
-        default_fps = 10
-    )
-    
-    return data_args
-"""
+       
 
 def generate_text(prompt, model, tokenizer, device, generation_config):
     inputs = tokenizer(prompt, return_tensors="pt").to(device)
