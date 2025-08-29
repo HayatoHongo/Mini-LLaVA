@@ -6,10 +6,10 @@ class IdentityMap(torch.nn.Module):
     def __init__(self):
         super().__init__()
         
-    def forwad(self, x, *args, **kwargs):
+    def forward(self, x, *args, **kwargs):
         return x 
     
-    @property 
+    @property
     def config(self):
         return {"mm_resampler_type": None}
     
